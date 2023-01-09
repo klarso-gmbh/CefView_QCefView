@@ -1,3 +1,3 @@
 [submodule "CefViewCore"]
 	path = CefViewCore
-	url = https://github.com/CefView/CefViewCore
+	url = git@github.com:klarso-gmbh/CefView_CefViewCore.git
