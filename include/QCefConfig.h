@@ -11,6 +11,10 @@
 #pragma once
 #include <QCefView_global.h>
 
+#pragma region std_headers
+#include <set>
+#pragma endregion std_headers
+
 #pragma region qt_headers
 #include <QColor>
 #include <QScopedPointer>
@@ -282,6 +286,16 @@ public:
   /// Gets the remote debugging port
   /// </summary>
   const QVariant remoteDebuggingPort() const;
+
+  /// <summary>
+  /// Adds custom scheme
+  /// </summary>
+  void addCustomScheme(const QString& scheme);
+
+  /// <summary>
+  /// Adds custom scheme
+  /// </summary>
+  std::set<std::string> getCustomSchemes() const;
 };
 
 Q_DECLARE_METATYPE(QCefConfig);

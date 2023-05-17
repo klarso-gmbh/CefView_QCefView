@@ -256,3 +256,21 @@ QCefConfig::remoteDebuggingPort() const
   Q_D(const QCefConfig);
   return d->remoteDebuggingport_;
 }
+
+void
+QCefConfig::addCustomScheme(const QString& scheme)
+{
+  Q_D(QCefConfig);
+  d->customSchemes_.append(scheme);
+}
+
+std::set<std::string>
+QCefConfig::getCustomSchemes() const
+{
+  Q_D(const QCefConfig);
+  std::set<std::string> schemes;
+  for (const QString& scheme : d->customSchemes_) {
+    schemes.insert(scheme.toStdString());
+  }
+  return schemes;
+}

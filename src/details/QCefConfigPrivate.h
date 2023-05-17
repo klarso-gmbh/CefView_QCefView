@@ -52,4 +52,6 @@ public:
   /* QColor */ QVariant backgroundColor_;
 
   ArgsMap commandLineArgs_;
+
+  QStringList customSchemes_;
 };

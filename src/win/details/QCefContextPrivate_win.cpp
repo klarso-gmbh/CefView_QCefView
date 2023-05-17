@@ -1,4 +1,4 @@
-﻿#include "../../details/QCefContextPrivate.h"
+#include "../../details/QCefContextPrivate.h"
 
 #include "../../details/QCefConfigPrivate.h"
 
@@ -27,7 +27,7 @@ QCefContextPrivate::initializeCef(const QCefConfig* config)
   auto cmdArgs = QCefConfigPrivate::GetCommandLineArgs(config);
   auto appDelegate = std::make_shared<CCefAppDelegate>(this, cmdArgs);
   auto bridgeObjectName = config ? config->bridgeObjectName().toStdString() : std::string();
-  auto app = new CefViewBrowserApp(bridgeObjectName, appDelegate);
+  auto app = new CefViewBrowserApp(bridgeObjectName, appDelegate, config->getCustomSchemes());
 
   void* sandboxInfo = nullptr;
 #if defined(CEF_USE_SANDBOX)
