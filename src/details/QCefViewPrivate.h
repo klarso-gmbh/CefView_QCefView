@@ -310,4 +310,8 @@ public:
   bool sendEventNotifyMessage(int64_t frameId, const QString& name, const QVariantList& args);
 
   bool setPreference(const QString& name, const QVariant& value, const QString& error);
+
+  bool setZoomLevel(double zoomLevel);
+
+  double getZoomLevel();
 };

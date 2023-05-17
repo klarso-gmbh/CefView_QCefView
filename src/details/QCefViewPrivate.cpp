@@ -2,6 +2,7 @@
 
 #pragma region std_headers
 #include <stdexcept>
+#include <math.h>
 #pragma endregion std_headers
 
 #pragma region qt_headers
@@ -1196,4 +1197,31 @@ QCefViewPrivate::setPreference(const QString& name, const QVariant& value, const
   }
 
   return false;
+}
+
+bool
+QCefViewPrivate::setZoomLevel(double zoomLevel)
+{
+  if (pCefBrowser_) {
+    CefRefPtr<CefBrowserHost> host = pCefBrowser_->GetHost();
+    if (host) {
+      host->SetZoomLevel(zoomLevel);
+      return true;
+    }
+  }
+
+  return false;
+}
+
+double
+QCefViewPrivate::getZoomLevel()
+{
+  if (pCefBrowser_) {
+    CefRefPtr<CefBrowserHost> host = pCefBrowser_->GetHost();
+    if (host) {
+      return host->GetZoomLevel();
+    }
+  }
+
+  return NAN;
 }

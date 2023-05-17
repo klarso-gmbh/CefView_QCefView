@@ -271,6 +271,22 @@ QCefView::setFocus(Qt::FocusReason reason)
 }
 
 bool
+QCefView::setZoomLevel(double zoomlevel)
+{
+  Q_D(QCefView);
+
+  return d->setZoomLevel(zoomlevel);
+}
+
+double
+QCefView::getZoomLevel()
+{
+  Q_D(QCefView);
+
+  return d->getZoomLevel();
+}
+
+bool
 QCefView::onBeforePopup(qint64 frameId,
                         const QString& targetUrl,
                         const QString& targetFrameName,

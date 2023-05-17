@@ -256,6 +256,28 @@ public:
   /// </summary>
   void closeDevTools();
 
+  /// Sets the zoom level for this browser
+  /// </summary>
+  /// <param name="zoomlevel">The zoom level (1.0 is normal)</param>
+  /// on successful; otherwise false</returns>
+  bool setZoomLevel(double zoomLevel);
+
+  /// <summary>
+  /// Gets the zoom level for this browser
+  /// </summary>
+  /// <returns>zoom level</returns>
+  double getZoomLevel();
+
+  /// <summary>
+  /// Finds and selects text in page
+  /// </summary>
+  /// <param name="text">The search text. Pass empty string to stop searching.</param>
+  /// <param name="forward">true searched forwards, false searches backwards</param>
+  /// <param name="matchCase">true if search should be case sensitive</param>
+  /// <param name="previousId">search id to find next match of previous search</param>
+  /// <returns>findId, can be used as previousId</returns>
+  int findText(const QString& text, bool forward = true, bool matchCase = false, int previousId = 0);
+
 signals:
   /// <summary>
   /// Gets called on loading state changed
