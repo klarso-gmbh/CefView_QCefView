@@ -206,6 +206,8 @@ QCefViewPrivate::isOSRModeEnabled() const
 void
 QCefViewPrivate::onCefBrowserCreated(CefRefPtr<CefBrowser> browser, QWindow* window)
 {
+  Q_Q(QCefView);
+
   // capture the browser
   pCefBrowser_ = browser;
 
@@ -271,6 +273,8 @@ QCefViewPrivate::onCefBrowserCreated(CefRefPtr<CefBrowser> browser, QWindow* win
     // emit the signal
     q_ptr->popupCreated(q_ptr);
   }
+
+  q->ready(browser->GetIdentifier());
 }
 
 void

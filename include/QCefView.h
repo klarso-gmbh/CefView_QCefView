@@ -279,6 +279,12 @@ public:
 
 signals:
   /// <summary>
+  /// Gets called when browser is ready to accept commands like <see cref="navigateToUrl"/> or <see cref="executeJavaScript"/>
+  /// </summary>
+  /// <param name="browserId">Indicates the browser id</param>
+  void ready(int browserId);
+
+  /// <summary>
   /// Gets called on loading state changed
   /// </summary>
   /// <param name="browserId">Indicates the browser id</param>
