@@ -314,4 +314,9 @@ public:
   bool setZoomLevel(double zoomLevel);
 
   double getZoomLevel();
+
+  void findText(const QString& text, bool forward, bool matchCase, bool findNext);
+
+protected:
+  int nextFindId_ = 1;
 };

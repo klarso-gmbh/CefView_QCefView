@@ -286,6 +286,14 @@ QCefView::getZoomLevel()
   return d->getZoomLevel();
 }
 
+void
+QCefView::findText(const QString& text, bool forward, bool matchCase, bool findNext)
+{
+  Q_D(QCefView);
+
+  return d->findText(text, forward, matchCase, findNext);
+}
+
 bool
 QCefView::onBeforePopup(qint64 frameId,
                         const QString& targetUrl,

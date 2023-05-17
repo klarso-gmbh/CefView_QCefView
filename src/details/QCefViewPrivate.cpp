@@ -1225,3 +1225,20 @@ QCefViewPrivate::getZoomLevel()
 
   return NAN;
 }
+
+void
+QCefViewPrivate::findText(const QString& text, bool forward, bool matchCase, bool findNext)
+{
+  if (pCefBrowser_) {
+    CefRefPtr<CefBrowserHost> host = pCefBrowser_->GetHost();
+    if (host) {
+      if (!text.isEmpty()) {
+        CefString ctext;
+        ctext.FromString(text.toStdString());
+        host->Find(ctext, forward, matchCase, findNext);
+      } else {
+        host->StopFinding(true);
+      }
+    }
+  }
+}

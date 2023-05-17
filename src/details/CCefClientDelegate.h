@@ -184,4 +184,11 @@ public:
                                       const CefRange& selected_range) override;
   virtual void onVirtualKeyboardRequested(CefRefPtr<CefBrowser> browser,
                                           CefRenderHandler::TextInputMode input_mode) override;
+  // FindHandler
+  virtual void findResult(CefRefPtr<CefBrowser>& browser,
+                          int identifier,
+                          int count,
+                          const CefRect& selectionRect,
+                          int activeMatchOrdinal,
+                          bool finalUpdate) override;
 };
