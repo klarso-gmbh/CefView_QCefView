@@ -12,6 +12,7 @@
 #include <QPainter>
 #include <QVBoxLayout>
 #include <QWindow>
+#include <QMimeData>
 #pragma endregion qt_headers
 
 #pragma region cef_headers
@@ -969,6 +970,129 @@ QCefViewPrivate::onViewWheelEvent(QWheelEvent* event)
       e, m & Qt::ShiftModifier ? 0 : d.x(), m & Qt::ShiftModifier ? 0 : d.y());
   }
   // #endif
+}
+
+void QCefViewPrivate::onViewDragEnterEvent(QDragEnterEvent *event)
+{
+  if (!isOSRModeEnabled_ || !pCefBrowser_) return;
+    
+  event->accept();
+  m_dragEntered = true;
+  
+  auto p = event->pos();
+  auto m = event->keyboardModifiers();
+  auto b = event->mouseButtons();
+  
+  const QMimeData* mimeData = event->mimeData();
+  const QList<QUrl> urls = mimeData->urls();
+  
+  CefMouseEvent e;
+  e.modifiers |= m & Qt::ControlModifier ? EVENTFLAG_CONTROL_DOWN : 0;
+  e.modifiers |= m & Qt::ShiftModifier ? EVENTFLAG_SHIFT_DOWN : 0;
+  e.modifiers |= m & Qt::AltModifier ? EVENTFLAG_ALT_DOWN : 0;
+  e.modifiers |= b & Qt::LeftButton ? EVENTFLAG_LEFT_MOUSE_BUTTON : 0;
+  e.modifiers |= b & Qt::RightButton ? EVENTFLAG_RIGHT_MOUSE_BUTTON : 0;
+  e.modifiers |= b & Qt::MiddleButton ? EVENTFLAG_MIDDLE_MOUSE_BUTTON : 0;
+  
+  e.x = p.x();
+  e.y = p.y();
+  
+  CefRefPtr<CefDragData> dropData = CefDragData::Create();
+  
+  bool hasFiles = false;
+  for (const QUrl &url : urls) {
+    if (url.isLocalFile()) {
+      dropData->AddFile(url.toLocalFile().toStdString(), url.toDisplayString().toStdString());
+      hasFiles = true;
+    }
+  }
+  
+  if (!hasFiles)
+  {
+    if (mimeData->hasUrls()) {
+      dropData->SetLinkURL(urls.first().toString().toStdString());
+      if (mimeData->hasText()) {
+        dropData->SetLinkTitle(mimeData->text().toStdString());
+      }
+    }
+    if (mimeData->hasHtml()) {
+      dropData->SetFragmentHtml(mimeData->html().toStdString());
+    }
+    
+    if (mimeData->hasText()) {
+      dropData->SetFragmentText(mimeData->text().toStdString());
+    }
+      
+    if (mimeData->hasFormat(QLatin1String("chromium/x-web-custom-data"))) {
+      QByteArray customData = mimeData->data(QLatin1String("chromium/x-web-custom-data"));
+      //TODO:
+      qDebug() << "chromium/x-web-custom-data not implemented";
+      //ui::ReadCustomDataIntoMap(customData.constData(), customData.length(), &dropData->custom_data);
+    }
+  }
+  
+  dropData->ResetFileContents();
+  
+  pCefBrowser_->GetHost()->DragTargetDragEnter(dropData, e, CefDragHandler::DragOperationsMask::DRAG_OPERATION_COPY);
+}
+
+void QCefViewPrivate::onViewDragMoveEvent(QDragMoveEvent *event)
+{
+  if (!isOSRModeEnabled_ || !pCefBrowser_) return;
+  
+  if(!m_dragEntered) return;
+  
+  event->accept();
+  
+  auto p = event->pos();
+  auto m = event->keyboardModifiers();
+  auto b = event->mouseButtons();
+  
+  CefMouseEvent e;
+  e.modifiers |= m & Qt::ControlModifier ? EVENTFLAG_CONTROL_DOWN : 0;
+  e.modifiers |= m & Qt::ShiftModifier ? EVENTFLAG_SHIFT_DOWN : 0;
+  e.modifiers |= m & Qt::AltModifier ? EVENTFLAG_ALT_DOWN : 0;
+  e.modifiers |= b & Qt::LeftButton ? EVENTFLAG_LEFT_MOUSE_BUTTON : 0;
+  e.modifiers |= b & Qt::RightButton ? EVENTFLAG_RIGHT_MOUSE_BUTTON : 0;
+  e.modifiers |= b & Qt::MiddleButton ? EVENTFLAG_MIDDLE_MOUSE_BUTTON : 0;
+  
+  e.x = p.x();
+  e.y = p.y();
+  
+  pCefBrowser_->GetHost()->DragTargetDragOver(e, CefDragHandler::DragOperationsMask::DRAG_OPERATION_EVERY);
+}
+
+void QCefViewPrivate::onViewDragLeaveEvent(QDragLeaveEvent *event)
+{
+  if (!isOSRModeEnabled_ || !pCefBrowser_) return;
+  pCefBrowser_->GetHost()->DragTargetDragLeave();
+  event->accept();
+  m_dragEntered = false;
+}
+
+void QCefViewPrivate::onViewDropEvent(QDropEvent *event)
+{
+  if (!isOSRModeEnabled_ || !pCefBrowser_) return;
+  if(!m_dragEntered) return;
+  
+  event->accept();
+  
+  auto p = event->pos();
+  auto m = event->keyboardModifiers();
+  auto b = event->mouseButtons();
+  
+  CefMouseEvent e;
+  e.modifiers |= m & Qt::ControlModifier ? EVENTFLAG_CONTROL_DOWN : 0;
+  e.modifiers |= m & Qt::ShiftModifier ? EVENTFLAG_SHIFT_DOWN : 0;
+  e.modifiers |= m & Qt::AltModifier ? EVENTFLAG_ALT_DOWN : 0;
+  e.modifiers |= b & Qt::LeftButton ? EVENTFLAG_LEFT_MOUSE_BUTTON : 0;
+  e.modifiers |= b & Qt::RightButton ? EVENTFLAG_RIGHT_MOUSE_BUTTON : 0;
+  e.modifiers |= b & Qt::MiddleButton ? EVENTFLAG_MIDDLE_MOUSE_BUTTON : 0;
+  
+  e.x = p.x();
+  e.y = p.y();
+  pCefBrowser_->GetHost()->DragTargetDrop(e);
+  m_dragEntered = false;
 }
 
 int

@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "QtGui/qevent.h"
 #pragma region qt_headers
 #include <QMenu>
 #include <QMutex>
@@ -273,6 +274,14 @@ protected:
   void onViewMouseEvent(QMouseEvent* event);
 
   void onViewWheelEvent(QWheelEvent* event);
+  
+  void onViewDragEnterEvent(QDragEnterEvent* event);
+  
+  void onViewDragMoveEvent(QDragMoveEvent* event);
+  
+  void onViewDragLeaveEvent(QDragLeaveEvent* event);
+  
+  void onViewDropEvent(QDropEvent *event);
 
 public:
   int browserId();
@@ -319,4 +328,5 @@ public:
 
 protected:
   int nextFindId_ = 1;
+  bool m_dragEntered = false;
 };

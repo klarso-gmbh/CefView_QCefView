@@ -491,3 +491,31 @@ QCefView::contextMenuEvent(QContextMenuEvent* event)
   }
   // #endif
 }
+
+void QCefView::dragEnterEvent(QDragEnterEvent *event)
+{
+  Q_D(QCefView);
+  d->onViewDragEnterEvent(event);
+}
+
+void QCefView::dragMoveEvent(QDragMoveEvent *event)
+{
+  Q_D(QCefView);
+  d->onViewDragMoveEvent(event);
+}
+
+void QCefView::dragLeaveEvent(QDragLeaveEvent *event)
+{
+  Q_D(QCefView);
+  d->onViewDragLeaveEvent(event);
+}
+
+void QCefView::dropEvent(QDropEvent *event)
+{
+  Q_D(QCefView);
+  d->onViewDropEvent(event);
+}
+
+
+
+

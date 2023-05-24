@@ -566,6 +566,27 @@ protected:
   /// Please refer to QWidget::contextMenuEvent
   /// </summary>
   void contextMenuEvent(QContextMenuEvent* event) override;
+  
+  /// <summary>
+  /// Please refer to QWidget::dragEnterEvent
+  /// </summary>  
+  void dragEnterEvent(QDragEnterEvent *event) override;
+  
+  /// <summary>
+  /// Please refer to QWidget::dragEnterEvent
+  /// </summary>  
+  void dragMoveEvent(QDragMoveEvent *event) override;
+  
+  /// <summary>
+  /// Please refer to QWidget::dragEnterEvent
+  /// </summary>  
+  void dragLeaveEvent(QDragLeaveEvent *event) override;
+  
+  /// <summary>
+  /// Please refer to QWidget::dropEvent
+  /// </summary>  
+  void dropEvent(QDropEvent *event) override;
+
 #pragma endregion
 };
 
